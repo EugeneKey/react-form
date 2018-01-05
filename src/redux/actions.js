@@ -94,8 +94,8 @@ export function preValidate() {
 }
 
 export const VALIDATE = 'VALIDATE';
-export function validate() {
-  return { type: VALIDATE };
+export function validate(field, value) {
+  return { type: VALIDATE, field, value };
 }
 
 export const SUBMIT = 'SUBMIT';

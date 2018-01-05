@@ -187,14 +187,14 @@ class Form extends Component {
     });
   }
 
-  setValue = ( field, value ) => {
+  setValue = ( field, value, validate = true ) => {
     this.props.dispatch(actions.setValue(field, value));
     this.props.dispatch(actions.removeAsyncError(field));
     this.props.dispatch(actions.removeAsyncWarning(field));
     this.props.dispatch(actions.removeAsyncSuccess(field));
-    if ( !this.props.validateOnSubmit ) {
+    if ( validate && !this.props.validateOnSubmit ) {
       this.props.dispatch(actions.preValidate());
-      this.props.dispatch(actions.validate());
+      this.props.dispatch(actions.validate(field, value));
     }
   }
 
@@ -203,7 +203,7 @@ class Form extends Component {
     // We have a flag to perform async validate when touched
     if ( validate && !this.props.validateOnSubmit ) {
       this.props.dispatch(actions.preValidate());
-      this.props.dispatch(actions.validate());
+      this.props.dispatch(actions.validate(field));
       this.props.dispatch(actions.asyncValidate(field, this.props.asyncValidators ));
     }
   }
@@ -270,7 +270,7 @@ class Form extends Component {
     return Utils.get( this.successes, field );
   }
 
-  addValue = ( field, value ) => {
+  addValue = ( field, value, validate = true ) => {
     this.props.dispatch(actions.setValue(field, [
       ...( Utils.get( this.props.formState.values, field ) || []),
       value,
@@ -278,7 +278,7 @@ class Form extends Component {
     this.props.dispatch(actions.removeAsyncError(field));
     this.props.dispatch(actions.removeAsyncWarning(field));
     this.props.dispatch(actions.removeAsyncSuccess(field));
-    if ( !this.props.dontValidateOnMount && !this.props.validateOnSubmit ) {
+    if ( validate && !this.props.dontValidateOnMount && !this.props.validateOnSubmit ) {
       this.props.dispatch(actions.preValidate());
       this.props.dispatch(actions.validate());
     }
